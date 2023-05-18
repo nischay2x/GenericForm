@@ -1,10 +1,20 @@
 import { useState } from "react";
 
-const useInput = (validationScheme) => {
+
+function validate(validateAs, value) {
+  switch(validateAs) {
+    case 'name': return value.trim() !== "";
+    case 'phone': return /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/.test(value);
+    case 'email': return /.{3,}@.{3,}\.com/.test(value);
+    default: return new RegExp(validateAs).test(value);
+  }
+}
+
+const useInput = ({ validateAs }) => {
   const [value, setValue] = useState("");
   const [touched, setTouched] = useState(false);
-  const isValid = validationScheme(value) && touched;
-  const isInvalid = !validationScheme(value) && touched;
+  const isValid = !Boolean(validateAs) || (validate(validateAs, value) && touched);
+  const isInvalid = Boolean(validateAs) && (!isValid && touched);
 
   const onChange = (e) => {
     setTouched(true);

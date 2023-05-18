@@ -1,16 +1,6 @@
 import useInput from "../Hooks/use-input";
 import Input from "./Input";
 
-const nameValidation = (val) => {
-  return val.trim() !== "";
-};
-const phValidation = (val) => {
-  var re = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
-  return re.test(+val);
-};
-const emailValidation = (val) => {
-  return /.{3,}@.{3,}\.com/.test(val);
-};
 
 const getForm = (...inputStates) => {
   const formIsValid = inputStates.reduce(
@@ -26,9 +16,9 @@ const getForm = (...inputStates) => {
 };
 
 const SimpleInput = (props) => {
-  const [nameInputStates, nameProps] = useInput(nameValidation);
-  const [emailInputStates, emailProps] = useInput(emailValidation);
-  const [phInputStates, phProps] = useInput(phValidation);
+  const [nameInputStates, nameProps] = useInput({ validateAs: 'name' });
+  const [emailInputStates, emailProps] = useInput({ validateAs: 'email' });
+  const [phInputStates, phProps] = useInput();
 
   const { formIsValid, formReset } = getForm(nameInputStates, emailInputStates,phInputStates);
 
